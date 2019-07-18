@@ -1,0 +1,32 @@
+SELECT 
+    ph.additionalFeatures , 
+    CONCAT_WS(',', an.os, an.ui) as android, 
+    GROUP_CONCAT(DISTINCT av.name) AS availability, 
+    CONCAT_WS(',', ba.standbyTime, ba.talkTime, ba.type) as battery, 
+	ca.primaryCamera as camera,
+    GROUP_CONCAT(DISTINCT fe.featureName) as features,
+    CONCAT_WS(',', co.bluetooth, co.cell, co.gps, co.infrared, co.wifi) as connectivity,
+    ph.description,
+    CONCAT_WS(',', di.screenResolution, di.screenSize, co.gps, di.touchScreen) as display,
+    CONCAT_WS(',', ha.accelerometer, ha.audioJack, ha.cpu, ha.fmRadio, ha.physicalKeyboard, ha.usb) as hardware,
+    ph.id,
+    GROUP_CONCAT(DISTINCT im.path) as images,
+    ph.name,
+    saw.weight as sizeandweight,
+    GROUP_CONCAT(DISTINCT dim.measurement) as dimensions,
+    CONCAT_WS(',', st.flash, st.ram) as storage
+    
+from phone as ph
+JOIN android as an ON an.androidId= ph.androidId
+JOIn availability as av ON av.phoneId = ph.phoneId
+JOIN battery as ba ON ba.batteryId = ph.batteryId
+JOIN camera as ca ON ca.cameraId = ph.cameraId
+JOIN features as fe ON fe.cameraId = ca.cameraId
+JOIN connectivity as co ON co.connectivityId = ph.connectivityId
+JOIN display as di ON di.displayId = ph.displayId
+JOIN hardware as ha ON ha.hardwareId = ph.hardwareId
+JOIN images as im ON im.phoneId = ph.phoneId
+JOIN sizeandweight as saw ON saw.sizeAndWeightId = ph.sizeAndWeightId
+JOIN dimensions as dim ON dim.sizeAndWeightId = saw.sizeAndWeightId
+JOIN storage as st ON st.storageId = ph.storageId
+GROUP BY ph.phoneId, av.phoneId
