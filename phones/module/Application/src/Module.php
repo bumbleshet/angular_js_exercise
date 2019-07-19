@@ -1,6 +1,7 @@
 <?php
 namespace Application;
 
+use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\Session\Container;
@@ -28,5 +29,12 @@ class Module
                 ),
             ),
         );
+    }
+
+    public function setEventManager(EventManagerInterface $events)
+    {
+        $this->events = $events;
+        // Register a listener at high priority
+        $events->attach('dispatch', array($this, 'checkOptions'), 10);
     }
 }

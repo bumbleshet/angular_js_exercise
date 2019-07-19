@@ -3,7 +3,6 @@ namespace Application;
 
 use Zend\Mvc\Router\Http\Literal;
 use Zend\Mvc\Router\Http\Segment;
-use Zend\ServiceManager\Factory\InvokableFactory;
 
 return array(
     'router' => [
@@ -39,26 +38,11 @@ return array(
             )
         ],
     ],
-    'application' => array(
-        'type'    => 'Literal',
-        'options' => array(
-            'route'    => '/application',
-            'defaults' => array(
-                '__NAMESPACE__' => 'Application\Controller',
-                'controller'    => Controller\IndexController::class,
-                'action'        => 'index',
-            ),
-        ),
-    ),
     'controllers' => array(
         'factories' => array(
             Controller\IndexController::class => ServiceFactory\Controller\IndexControllerFactory::class,
             Controller\Rest\PhoneController::class => ServiceFactory\Controller\Rest\PhoneControllerFactory::class,
         ),
-//        'invokables' => array(
-//            Controller\IndexController::class => Controller\IndexController::class,
-//            Controller\Rest\PhoneController::class => InvokableFactory::class,
-//        ),
     ),
     'service_manager' => array(
         'abstract_factories' => array(
@@ -68,7 +52,12 @@ return array(
         'factories' => array(
             'translator' => 'Zend\Mvc\Service\TranslatorServiceFactory',
             Model\PhoneTable::class => ServiceFactory\Model\PhoneTableFactory::class,
-            Service\IndexService::class => ServiceFactory\Service\IndexServiceFactory::class,
+            Service\PhoneService::class => ServiceFactory\Service\PhoneServiceFactory::class,
+        ),
+
+        'invokables' =>array(
+            Filter\PhoneFilter::class => Filter\PhoneFilter::class,
+            Model\Phone::class => Model\Phone::class,
         ),
     ),
     'translator' => array(

@@ -1,13 +1,13 @@
 <?php
 namespace Application\ServiceFactory\Service;
 
-use Application\Service\IndexService;
+use Application\Service\PhoneService;
 use Psr\Container\ContainerInterface;
 
-class IndexServiceFactory
+class PhoneServiceFactory
 {
     public function __invoke(ContainerInterface $container)
     {
-        return new IndexService();
+        return new PhoneService();
     }
 }

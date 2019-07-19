@@ -12,59 +12,93 @@ class PhoneTable
         $this->PhonesTableGateway = $PhonesTableGateway;
     }
 
+    /**
+     * @param $phoneId
+     * @param $jsonData
+     * @return bool|int
+     */
     public function insertPhone($phoneId, $jsonData)
     {
         if (!$this->checkDbConnection()) {
             return false;
         }
 
-        $insertFlag = $this->PhonesTableGateway->insert([
+        $successFlag = $this->PhonesTableGateway->insert([
             'phone_id' => $phoneId,
             'json_data' => $jsonData
         ]);
 
-        return $insertFlag;
+        return $successFlag;
     }
 
-    public function fetchPhone($phoneId)
+    /**
+     * @param $phoneId
+     * @param $jsonData
+     * @return bool|int
+     */
+    public function updatePhone($phoneId, $jsonData)
     {
         if (!$this->checkDbConnection()) {
             return false;
         }
 
-        $select = $this->PhonesTableGateway->getSql()->select()
-            ->where(['phone_id' => $phoneId]);
-        $resultSet = $this->PhonesTableGateway->selectWith($select)->current();
+        $where = array('phone_id' => $phoneId);
+        $successFlag = $this->PhonesTableGateway->update($jsonData, $where);
 
-        return $resultSet;
+        return $successFlag;
     }
 
-    public function fetchPhones()
-    {
-        if (!$this->checkDbConnection()) {
-            return false;
-        }
-
-        $select = $this->PhonesTableGateway->getSql()->select()
-            ->columns(['json_data']);
-        $resultSet = $this->PhonesTableGateway->selectWith($select);
-
-        return $resultSet;
-    }
-
+    /**
+     * @param $phoneId
+     * @return bool|int
+     */
     public function deletePhone($phoneId)
     {
         if (!$this->checkDbConnection()) {
             return false;
         }
 
-        $deleteFlag = $this->PhonesTableGateway->delete([
-            'phone_id' => $phoneId,
-        ]);
+        $successFlag = $this->PhonesTableGateway->delete(['phone_id' => $phoneId]);
 
-        return $deleteFlag;
+        return $successFlag;
     }
 
+    /**
+     * @param $phoneId
+     * @return string|\Zend\Db\ResultSet\ResultSetInterface
+     */
+    public function fetchPhone($phoneId)
+    {
+        if (!$this->checkDbConnection()) {
+            return 'dbError';
+        }
+
+        $select = $this->PhonesTableGateway->getSql()->select()
+            ->where(['phone_id' => $phoneId]);
+        $ResultSet = $this->PhonesTableGateway->selectWith($select)->current();
+
+        return $ResultSet;
+    }
+
+    /**
+     * @return string|\Zend\Db\ResultSet\ResultSetInterface
+     */
+    public function fetchPhones()
+    {
+        if (!$this->checkDbConnection()) {
+            return 'dbError';
+        }
+
+        $select = $this->PhonesTableGateway->getSql()->select()
+            ->columns(['json_data']);
+        $ResultSet = $this->PhonesTableGateway->selectWith($select);
+
+        return $ResultSet;
+    }
+
+    /**
+     * @return bool
+     */
     private function checkDbConnection()
     {
         try {
@@ -74,6 +108,5 @@ class PhoneTable
         } catch (\Exception $e) {
             return false;
         }
-        exit;
     }
 }

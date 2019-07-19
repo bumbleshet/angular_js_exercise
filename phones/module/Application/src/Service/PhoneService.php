@@ -10,4 +10,10 @@ class PhoneService
 
         return $phoneId;
     }
+
+    public function raiseResponseCode($response, $status_code)
+    {
+        $response->setStatusCode($status_code);
+        return $response;
+    }
 }

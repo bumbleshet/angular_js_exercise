@@ -25,7 +25,7 @@ class IndexController extends AbstractActionController
         return new ViewModel();
     }
 
-    public function insertPhonesToDbAction()
+    public function populateDbAction()
     {
         $phonesPath = glob("./data/phones/*");
         foreach($phonesPath as $phonePath) {
